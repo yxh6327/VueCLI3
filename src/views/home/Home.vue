@@ -3,18 +3,22 @@
 		<NavBar class="home-nav">
 			<div slot="center">购物车</div>
 		</NavBar>
-		<HomeSwiper :banner="banner"></HomeSwiper>
-		<RecommendView :recommend="recommend"></RecommendView>
-		<FeatureView></FeatureView>
-		<TabControl :titles="['流行','新款','精选']"
-		             class="tab-control"
-		             @tabClick="tabClick"></TabControl>
-		<GoodsList :goods="showGoods"></GoodsList>
+		<Scroll class="content">
+			<HomeSwiper :banner="banner"></HomeSwiper>
+			<RecommendView :recommend="recommend"></RecommendView>
+			<FeatureView></FeatureView>
+			<TabControl :titles="['流行','新款','精选']"
+			             class="tab-control"
+			             @tabClick="tabClick"></TabControl>
+			<GoodsList :goods="showGoods"></GoodsList>
+		</Scroll>
+
 	</div>
 </template>
 
 <style scoped>
     #home{
+    	height: 100vh;
     	padding-top: 44px;
     }
 	.home-nav{
@@ -28,6 +32,10 @@
 		position: sticky;
 		top: 44px;
 	}
+	.content{
+        height: calc(100% - 49px);
+		overflow: hidden;
+	}
 </style>
 <script>
 import HomeSwiper from './childComps/HomeSwiper.vue'
@@ -37,6 +45,7 @@ import FeatureView from './childComps/FeatureView.vue'
 import NavBar from 'components/common/navbar/NavBar.vue'
 import TabControl from 'components/context/tabControl/TabControl.vue'
 import GoodsList from 'components/context/homeGoods/GoodsList.vue'
+import Scroll from 'components/common/scroll/Scroll.vue'
 
 import {getHomeMultidata, getHomeData} from 'network/home.js'
 	export default{
@@ -72,7 +81,8 @@ import {getHomeMultidata, getHomeData} from 'network/home.js'
 			FeatureView,
 			NavBar,
 			TabControl,
-			GoodsList
+			GoodsList,
+			Scroll
 		},
 		methods: {
 			//以下是方法代码
