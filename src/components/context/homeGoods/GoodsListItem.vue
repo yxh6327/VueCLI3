@@ -1,7 +1,7 @@
 <template>
 	<div class="goods-list-item">
 		<!-- 图片上是没有链接的 -->
-		<img :src="goodsitem.show.img" alt="">
+		<img :src="goodsitem.show.img" alt="" @load="itemImageLoad">
 		<div class="goods-text">
 			<p class="title">{{goodsitem.title}}</p>
 			<span class="price">￥{{goodsitem.price}}</span>
@@ -60,6 +60,11 @@
 					return {}
 				}
 			}
-		}
+		},
+        methods:{
+            itemImageLoad() {
+                this.$bus.$emit('itemImageLoad');
+            }
+        }
 	}
 </script>

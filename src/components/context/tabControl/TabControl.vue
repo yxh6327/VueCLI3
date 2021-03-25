@@ -11,6 +11,7 @@
 		display: flex;
 		text-align: center;
 		height: 40px;
+		width: 100%;
 		line-height: 40px;
 		background-color: #fff;
 	}
