@@ -1,5 +1,5 @@
 <template>
-	<div class="goods-list-item">
+	<div class="goods-list-item" @click="itemClick">
 		<!-- 图片上是没有链接的 -->
 		<img :src="goodsitem.show.img" alt="" @load="itemImageLoad">
 		<div class="goods-text">
@@ -64,6 +64,9 @@
         methods:{
             itemImageLoad() {
                 this.$bus.$emit('itemImageLoad');
+            },
+            itemClick() {
+                this.$router.push('/detail/' + this.goodsitem.iid);
             }
         }
 	}

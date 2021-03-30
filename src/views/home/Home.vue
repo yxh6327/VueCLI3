@@ -89,7 +89,8 @@ import {debounce} from 'common/utils.js'
                 currentType: 'pop',
                 isBackTopShow: false,
                 tabControlOffsetTop: 0,
-                isTabControlfixed: false
+                isTabControlfixed: false,
+                saveY: 0
 			}
 		},
 		computed: {
@@ -97,6 +98,14 @@ import {debounce} from 'common/utils.js'
 				return this.goods[this.currentType].list
 			}
 		},
+		//在离开home时保持原来的位置
+        activated() {
+            this.$refs.scroll.scrollTo(0, this.saveY, 1);
+            this.$refs.scroll.refresh();
+        },
+        deactivated() {
+            this.saveY = this.$refs.scroll.getScrollY();
+        },
 		created() {
 			//请求多个数据
 			this.getHomeMultidata();
@@ -156,7 +165,6 @@ import {debounce} from 'common/utils.js'
             getOffesetTop() {
             	this.tabControlOffsetTop = this.$refs.tabControl2.$el.offsetTop;
             },
-
 	
 
 			//以下是网络请求的相关函数代码
