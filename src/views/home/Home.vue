@@ -74,7 +74,8 @@ import BackTop from 'components/context/backtop/BackTop.vue'
 
 import {getHomeMultidata, getHomeData} from 'network/home.js'
 
-import {debounce} from 'common/utils.js'
+// import {debounce} from 'common/utils.js'
+import {itemListenerMixin} from 'common/mixin.js'
 	export default{
 		name: 'Home',
 		data() {
@@ -90,7 +91,8 @@ import {debounce} from 'common/utils.js'
                 isBackTopShow: false,
                 tabControlOffsetTop: 0,
                 isTabControlfixed: false,
-                saveY: 0
+                saveY: 0,
+                itemImgListener: null
 			}
 		},
 		computed: {
@@ -104,7 +106,10 @@ import {debounce} from 'common/utils.js'
             this.$refs.scroll.refresh();
         },
         deactivated() {
+        	//保存Y值
             this.saveY = this.$refs.scroll.getScrollY();
+            //在离开时取消全局事件的监听
+            this.$bus.$off('itemImageLoad', this.itemImgListener);
         },
 		created() {
 			//请求多个数据
@@ -114,17 +119,19 @@ import {debounce} from 'common/utils.js'
             this.getHomeData('new');
             this.getHomeData('sell');
 		},
+		minxins: [itemListenerMixin],
 		mounted() {
 			//图片加载完了就scroll.refresh() 但是这个有频繁刷新的问题，因此要写一个防抖函数
             // this.$bus.$on('itemImageLoad', () => {
             // 	this.$refs.scroll.refresh();
             // })
-            // 加入防抖处理后
-            const refresh = debounce(this.$refs.scroll.refresh, 500);
-            this.$bus.$on('itemImageLoad', () => {
-            	refresh();
-            });
-
+            
+            // 加入防抖处理后 该段代码也被混入替代了
+            // const refresh = debounce(this.$refs.scroll.refresh, 500);
+            // this.itemImgListener = () => {
+            // 	refresh();
+            // };
+            // this.$bus.$on('itemImageLoad', this.itemImgListener);
 		},
 		components: {
 			HomeSwiper,
@@ -154,8 +161,10 @@ import {debounce} from 'common/utils.js'
                 this.$refs.scroll.scrollTo(0,0,500);
             },
             scrollPosition(position) {
-            	this.isBackTopShow = -position.y > 1000;
+            	//固定首页的导航栏
             	this.isTabControlfixed = -position.y > (this.tabControlOffsetTop) - 44;
+            	//是否显示返回顶部
+            	this.isBackTopShow = -position.y > 1000;
             },
             loadMore() {
             	this.getHomeData(this.currentType);

@@ -41,9 +41,11 @@
 				this.$emit('scrollPosition', position)
 			});
 			//监听scroll滚动到底部
-			this.scroll.on('pullingUp',() => {
-				this.$emit('loadMore')
-			})
+			if(this.pullUpLoad) {
+				this.scroll.on('pullingUp',() => {
+					this.$emit('loadMore')
+				})
+			}
 		},
 		methods:{
 			scrollTo(x,y,time) {

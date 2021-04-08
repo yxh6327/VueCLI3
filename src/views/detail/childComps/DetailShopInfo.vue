@@ -14,7 +14,7 @@
         </div>
         <div class="info-goods">
           <div class="goods-count">
-            {{shop.goodCount}}
+            {{shop.goodsCount}}
           </div>
           <div class="goods-text">全部宝贝</div>
         </div>
@@ -34,6 +34,26 @@
     </div>
   </div>
 </template>
+
+<script>
+	export default {
+		name: "DetailShopInfo",
+    props: {
+		  shop: {
+		    type: Object,
+        default() {
+		      return {}
+        }
+      }
+    },
+    filters: {
+      sellCountFilter: function (value) {
+        if (value < 10000) return value;
+        return (value/10000).toFixed(1) + '万'
+      }
+    }
+	}
+</script>
 
 <style scoped>
   .shop-info {
@@ -135,25 +155,3 @@
     border-radius: 10px;
   }
 </style>
-
-
-<script>
-	export default {
-		name: "ShopInfo",
-    props: {
-		  shop: {
-		    type: Object,
-        default() {
-		      return {}
-        }
-      }
-    },
-    filters: {
-      sellCountFilter: function (value) {
-        if (value < 10000) return value;
-        return (value/10000).toFixed(1) + '万'
-      }
-    }
-	}
-</script>
-

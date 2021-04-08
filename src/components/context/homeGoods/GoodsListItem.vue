@@ -1,7 +1,7 @@
 <template>
 	<div class="goods-list-item" @click="itemClick">
 		<!-- 图片上是没有链接的 -->
-		<img :src="goodsitem.show.img" alt="" @load="itemImageLoad">
+		<img :src="showImage" alt="" @load="itemImageLoad">
 		<div class="goods-text">
 			<p class="title">{{goodsitem.title}}</p>
 			<span class="price">￥{{goodsitem.price}}</span>
@@ -61,9 +61,19 @@
 				}
 			}
 		},
+        computed: {
+            showImage() {
+                return this.goodsitem.image || this.goodsitem.show.img
+            }
+        },
         methods:{
             itemImageLoad() {
-                this.$bus.$emit('itemImageLoad');
+                if(this.$route.path.indexOf('/home')) {
+                    this.$bus.$emit('itemImageLoad');
+                } else if(this.$route.path.indexOf('/detail')) {
+                    this.$bus.$emit('itemImageLoad');
+                }
+                
             },
             itemClick() {
                 this.$router.push('/detail/' + this.goodsitem.iid);

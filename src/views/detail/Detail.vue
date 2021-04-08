@@ -1,99 +1,167 @@
 <template>
-	<div id="detail">
-		<DetailNavBar></DetailNavBar>
-		<Scroll class="swiper">
-			<DetailSwiper :topImage="topImage"></DetailSwiper>
-			<BaseInfo :goods="goods"></BaseInfo>
-			<ShopInfo :shop="shop"></ShopInfo>
-			<ul>
-				<li>liebiao1</li>
-				<li>liebiao2</li>
-				<li>liebiao3</li>
-				<li>liebiao4</li>
-				<li>liebiao5</li>
-				<li>liebiao6</li>
-				<li>liebiao7</li>
-				<li>liebiao8</li>
-				<li>liebiao9</li>
-				<li>liebiao10</li>
-				<li>liebiao11</li>
-				<li>liebiao12</li>
-				<li>liebiao13</li>
-				<li>liebiao14</li>
-				<li>liebiao15</li>
-				<li>liebiao16</li>
-				<li>liebiao17</li>
-				<li>liebiao18</li>
-				<li>liebiao19</li>
-				<li>liebiao20</li>
-				<li>liebiao21</li>
-				<li>liebiao22</li>
-				<li>liebiao23</li>
-				<li>liebiao24</li>
-				<li>liebiao25</li>
-				<li>liebiao26</li>
-				<li>liebiao27</li>
-				<li>liebiao28</li>
-				<li>liebiao29</li>
-				<li>liebiao30</li>
-			</ul>
-		</Scroll>
-	</div>	
+  <div id="detail">
+    <detail-nav-bar class="detail-nav" @titleClick='titleClick' ref="detailNavbar"/>
+    <scroll class="content" ref="scroll" :probe-type="3" @scrollPosition="scrollPosition">
+      <detail-swiper :top-images="topImages"/>
+      <detail-base-info :goods="goods"/>
+      <detail-shop-info :shop="shop"/>
+      <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad"/>
+      <detail-param-info :param-info="paramInfo" ref="param"/>
+      <detail-comment-info :comment-info="commentInfo" ref="comment"/>
+      <goods-list :goods="recommends" ref="recommend"/>
+    </scroll>
+    <BackTop @click.native="backClick" v-show="isBackTopShow"></BackTop>
+    <detail-bottom-bar/>
+  </div>
 </template>
 
 <style scoped>
-    #detail{
-    	position: relative;
-    	height: 100vh;
-    	z-index: 9;
-    	background-color: #fff;
-    }
-	.swiper{
-		position: absolute;
-		top: 44px;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		overflow: hidden;
-	}
+  #detail {
+    position: relative;
+    z-index: 9;
+    background-color: #fff;
+    height: 100vh;
+  }
+
+  .detail-nav {
+    position: relative;
+    z-index: 9;
+    background-color: #fff;
+  }
+
+  .content {
+    position: relative;
+    height: calc(100% - 44px - 49px);
+  }
 </style>
 
 <script>
-import DetailNavBar from './childComps/DetailNavBar.vue'
-import Scroll from 'components/common/scroll/Scroll.vue'
-import DetailSwiper from './childComps/DetailSwiper.vue'
-import BaseInfo from './childComps/BaseInfo.vue'
-import ShopInfo from './childComps/ShopInfo.vue'
-import {getDetailData, Goods, Shop} from 'network/detail.js'
-	export default{
-		name: 'Detail',
-		data() {
-			return {
-				iid: null,
-				topImage: [],
-				goods: {},
-				shop: {}
-			}
-		},
-		components: {
-            DetailNavBar,
-            Scroll,
-            DetailSwiper,
-            BaseInfo,
-            ShopInfo
-		},
-		created() {
-			this.iid = this.$route.params.iid;
-			getDetailData(this.iid).then((res) => {
-				const data = res.result;
-				console.log(data);
-				//轮播图数据
-				this.topImage = data.itemInfo.topImages;
-				//商品基本信息数据
-                this.goods = new Goods(data.itemInfo, data.columns, data.shopInfo.services);
-                //商家基本信息数据
-                this.shop = new Shop(data.shopInfo);
-			})
-		}
-	}
+  import DetailNavBar from './childComps/DetailNavBar'
+  import DetailSwiper from './childComps/DetailSwiper'
+  import DetailBaseInfo from './childComps/DetailBaseInfo'
+  import DetailShopInfo from './childComps/DetailShopInfo'
+  import DetailGoodsInfo from './childComps/DetailGoodsInfo'
+  import DetailParamInfo from './childComps/DetailParamInfo'
+  import DetailCommentInfo from './childComps/DetailCommentInfo.vue'
+  import GoodsList from 'components/context/homeGoods/GoodsList.vue'
+  import BackTop from 'components/context/backtop/BackTop.vue'
+  import DetailBottomBar from './childComps/DetailBottomBar.vue'
+
+  import Scroll from 'components/common/scroll/Scroll'
+
+  import {getDetail, getRecommend, Goods, Shop, GoodsParam} from 'network/detail'
+  import {itemListenerMixin} from 'common/mixin.js'
+
+  export default {
+    name: "Detail",
+    components: {
+      DetailNavBar,
+      DetailSwiper,
+      DetailBaseInfo,
+      DetailShopInfo,
+      DetailGoodsInfo,
+      DetailParamInfo,
+      DetailCommentInfo,
+      GoodsList,
+      Scroll,
+      BackTop,
+      DetailBottomBar
+    },
+    data() {
+      return {
+        iid: null,
+        topImages: [],
+        goods: {},
+        shop: {},
+        detailInfo: {},
+        paramInfo: {},
+        commentInfo: {},
+        recommends: [],
+        themeTopYs: [],
+        currentIndex: 0,
+        isBackTopShow: false
+      }
+    },
+    created() {
+      // 1.保存传入的iid
+      this.iid = this.$route.params.iid
+
+      // 2.根据iid请求详情数据
+      getDetail(this.iid).then(res => {  
+        const data = res.result;
+        console.log(data);
+        // 1.获取顶部的图片轮播数据
+        this.topImages = data.itemInfo.topImages
+
+        // 2.获取商品信息
+        this.goods = new Goods(data.itemInfo, data.columns, data.shopInfo.services)
+
+        // 3.创建店铺信息的对象
+        this.shop = new Shop(data.shopInfo)
+
+        // 4.保存商品的详情数据
+        this.detailInfo = data.detailInfo;
+
+        // 5.获取参数的信息
+        this.paramInfo = new GoodsParam(data.itemParams.info, data.itemParams.rule);
+
+        //6.获取评论信息
+        if(data.rate.list !== undefined) {
+          this.commentInfo = data.rate.list[0];
+        }
+      })
+
+      //7.获取详情页的推荐数据
+      getRecommend().then(res => {
+        this.recommends = res.data.list;
+      })
+    },
+    minxins: [itemListenerMixin],
+    mounted() {
+      //加入防抖处理，详情页的推荐数据加载完后让scroll进行一次刷新
+      // const refresh = debounce(this.$refs.scroll.refresh, 500);
+      // this.itemImgListener = () => {
+      //   refresh();
+      // };
+      // this.$bus.$on('itemImageLoad', this.itemImgListener);
+      // 以上代码被混入替换掉了
+    },
+    destroyed() {
+      this.$bus.$off('itemImageLoad', this.itemImgListener);
+    },
+    methods: {
+      imageLoad() {
+        this.$refs.scroll.refresh();
+
+        //在image加载完成后拿到各个主题距离顶端的距离
+        this.themeTopYs = [];
+        this.themeTopYs.push(0);
+        this.themeTopYs.push(this.$refs.param.$el.offsetTop);
+        this.themeTopYs.push(this.$refs.comment.$el.offsetTop);
+        this.themeTopYs.push(this.$refs.recommend.$el.offsetTop);
+        this.themeTopYs.push(Number.MAX_VALUE);
+      },
+      titleClick(index) {
+        this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 200);
+      },
+      scrollPosition(position) {
+        //滚动到一定位置时对应一定的导航栏文字
+        for(let i = 0; i < this.themeTopYs.length - 1; i++) {
+          if(this.currentIndex !== i) {
+            if(-position.y >= this.themeTopYs[i] && -position.y < this.themeTopYs[i + 1]) {
+              this.currentIndex = i;
+              this.$refs.detailNavbar.currentIndex = i;
+            }
+          }
+        }
+        //是否显示返回顶部
+        this.isBackTopShow = -position.y > 1000;
+      },
+      backClick() {
+        this.$refs.scroll.scrollTo(0,0,500);
+      }
+    }
+  }
 </script>
+
+

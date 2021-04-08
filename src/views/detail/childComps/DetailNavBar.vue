@@ -1,55 +1,64 @@
 <template>
-	<div>
-		<NavBar>
-			<div slot="left" class="back" @click="back">
-				<img src="~assets/img/common/back.svg" alt="">
-			</div>
-			<div slot="center" class="title">
-				<div v-for="(item,index) in title" 
-				     class="title-item" 
-				     @click="itemClick(index)"
-				     :class="{activeColor: currentIndex == index}">{{item}}</div>
-			</div>
-		</NavBar>
-	</div>
+  <div>
+    <nav-bar>
+      <div slot="left" class="back" @click="backClick">
+        <img src="~assets/img/common/back.svg" alt="">
+      </div>
+      <div slot="center" class="title">
+        <div v-for="(item, index) in titles"
+             class="title-item"
+             :class="{active: index === currentIndex}"
+             @click="titleClick(index)">
+          {{item}}
+        </div>
+      </div>
+    </nav-bar>
+  </div>
 </template>
 
 <style scoped>
-	.title{
-		display: flex;
-		font-size: 14px;
-	}
-	.title-item{
-		flex: 1;
-	}
-	.back{
-		margin-top: 6px;
-	}
-	.activeColor{
-		color: #ff8198;
-	}
+  .title {
+    display: flex;
+    font-size: 13px;
+  }
+
+  .title-item {
+    flex: 1;
+  }
+
+  .active {
+    color: #ff8198;
+  }
+
+  .back img {
+    margin-top: 12px;
+  }
 </style>
 
 <script>
-import NavBar from 'components/common/navbar/NavBar.vue'
-	export default{
-		name: 'DetailNavBar',
-		data() {
-			return {
-				title: ['商品', '参数', '评论', '推荐'],
-				currentIndex: 0,
-			}
-		},
-		components: {
-			NavBar
-		},
-		methods: {
-			back() {
-				this.$router.back();
-			},
-			itemClick(index) {
-                this.currentIndex = index;
-			}
-		}
-	}
+  import NavBar from 'components/common/navbar/NavBar'
+
+  export default {
+    name: "DetailNavBar",
+    components: {
+      NavBar
+    },
+    data() {
+      return {
+        titles: ['商品', '参数', '评论', '推荐'],
+        currentIndex: 0
+      }
+    },
+    methods: {
+      titleClick(index) {
+        this.currentIndex = index;
+        this.$emit('titleClick', index);
+      },
+      backClick() {
+        this.$router.back()
+      }
+    }
+  }
 </script>
+
+
