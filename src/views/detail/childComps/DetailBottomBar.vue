@@ -15,7 +15,7 @@
 			</div>
 		</div>
 		<div class="bottom-bar-right">
-			<div class="right-item shopcar">加入购物车</div>
+			<div class="right-item shopcar" @click="addShopCar">加入购物车</div>
 		    <div class="right-item buy">购买</div>
 		</div>
 	</div>
@@ -26,7 +26,10 @@
 		height: 49px;
 		width: 100%;
 		background-color: #fff;
-		position: relative;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
 		display: flex;
 	}
 	.bottom-bar-left{
@@ -76,6 +79,11 @@
 
 <script>
 	export default{
-		name: 'DetailBottomBar'
+		name: 'DetailBottomBar',
+		methods: {
+			addShopCar() {
+				this.$emit('addShopCar');
+			}
+		}
 	}
 </script>

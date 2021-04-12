@@ -1,10 +1,10 @@
 <template>
-    <div id="tabbar">
+    <div class="tabbar">
   	    <slot></slot>
   	</div>
 </template>
-<style>
-     #tabbar{
+<style scoped>
+     .tabbar{
     	display: flex;
     	height: 49px;
     	position: fixed;

@@ -11,7 +11,8 @@
       <goods-list :goods="recommends" ref="recommend"/>
     </scroll>
     <BackTop @click.native="backClick" v-show="isBackTopShow"></BackTop>
-    <detail-bottom-bar/>
+    <detail-bottom-bar @addShopCar="addShopCar"/>
+    <toast :message="message" :is-show="isShow"/>
   </div>
 </template>
 
@@ -30,8 +31,13 @@
   }
 
   .content {
-    position: relative;
-    height: calc(100% - 44px - 49px);
+    position: absolute;
+    top: 44px;
+    bottom: 49px;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    /*height: calc(100% - 44px -49px);*/
   }
 </style>
 
@@ -46,6 +52,7 @@
   import GoodsList from 'components/context/homeGoods/GoodsList.vue'
   import BackTop from 'components/context/backtop/BackTop.vue'
   import DetailBottomBar from './childComps/DetailBottomBar.vue'
+  import Toast from 'components/common/toast/Toast.vue'
 
   import Scroll from 'components/common/scroll/Scroll'
 
@@ -65,7 +72,8 @@
       GoodsList,
       Scroll,
       BackTop,
-      DetailBottomBar
+      DetailBottomBar,
+      Toast
     },
     data() {
       return {
@@ -79,7 +87,9 @@
         recommends: [],
         themeTopYs: [],
         currentIndex: 0,
-        isBackTopShow: false
+        isBackTopShow: false,
+        message: '',
+        isShow: false
       }
     },
     created() {
@@ -159,6 +169,29 @@
       },
       backClick() {
         this.$refs.scroll.scrollTo(0,0,500);
+      },
+      addShopCar() {
+        const product = {};
+        product.iid = this.iid;
+        product.title = this.goods.title;
+        product.price = this.goods.realPrice;
+        product.img = this.topImages[0];
+        product.desc = this.goods.desc;
+        product.count = 0;
+        product.checked = false;
+        //当加入购物车这个环节完成后就返回一个信息
+        this.$store.dispatch('shopCar', product).then((res) => {
+          //普通的方法使用toast
+          this.message = res;
+          this.isShow = true;
+
+          setTimeout(() => {
+            this.message = '';
+            this.isShow = false;
+          }, 1500);
+          // 插件的方法使用toast
+          // this.$toast.methods.show(res, 1500);
+        });
       }
     }
   }

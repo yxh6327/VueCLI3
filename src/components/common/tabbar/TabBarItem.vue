@@ -5,7 +5,7 @@
         <div :style="activeStyle"><slot name="item-text"></slot></div>
 	</div>
 </template>
-<style>
+<style scoped>
 	.tabbar-item{
     	flex: 1;
     	text-align: center;

@@ -1,7 +1,7 @@
 <template>
 	<div class="goods-list-item" @click="itemClick">
 		<!-- 图片上是没有链接的 -->
-		<img :src="showImage" alt="" @load="itemImageLoad">
+		<img v-lazy="showImage" alt="" @load="itemImageLoad">
 		<div class="goods-text">
 			<p class="title">{{goodsitem.title}}</p>
 			<span class="price">￥{{goodsitem.price}}</span>
@@ -68,12 +68,7 @@
         },
         methods:{
             itemImageLoad() {
-                if(this.$route.path.indexOf('/home')) {
-                    this.$bus.$emit('itemImageLoad');
-                } else if(this.$route.path.indexOf('/detail')) {
-                    this.$bus.$emit('itemImageLoad');
-                }
-                
+                this.$bus.$emit('itemImageLoad');                
             },
             itemClick() {
                 this.$router.push('/detail/' + this.goodsitem.iid);

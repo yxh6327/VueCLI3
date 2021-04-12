@@ -14,6 +14,7 @@
 		width: 100%;
 		line-height: 40px;
 		background-color: #fff;
+		margin: -1px 0;
 	}
 	.tab-control-item{
 		flex: 1;

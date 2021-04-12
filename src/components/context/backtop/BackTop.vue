@@ -8,7 +8,7 @@
 	.back-top img{
 		width: 50px;
 		position: fixed;
-		bottom: 70px;
+		bottom: 60px;
 		right: 5px;
 		z-index: 3;
 	}
