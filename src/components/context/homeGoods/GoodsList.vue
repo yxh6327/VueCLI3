@@ -11,7 +11,7 @@
 		flex-wrap: wrap;
 		justify-content: space-around;
 		padding: 0px 3px;
-		margin: 20px 0;
+		margin: 10px 0;
 	}
 </style>
 

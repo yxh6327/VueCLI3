@@ -8,7 +8,7 @@
 			<span class="text">全选</span>
 		</div>
 		<div class="total-price">合计: ￥{{totalPrice}}</div>
-		<div class="pay" @click="payClick">去计算({{payCount}})</div>
+		<div class="pay" @click="payClick">结算({{payCount}})</div>
 	</div>
 </template>
 

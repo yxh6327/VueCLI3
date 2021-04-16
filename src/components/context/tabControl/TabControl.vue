@@ -1,7 +1,12 @@
 <template>
 	<div class="tab-control">
-		<div class="tab-control-item" v-for="(item, index) in titles" @click="itemClick(index)" :class="{select: index === currentIndex}">
-			<span>{{item}}</span>
+		<div class="tab-control-item" 
+		     v-for="(item, index) in titles" 
+		     @click="itemClick(index)">
+			<span class="item-text" 
+			     :class="{select: index === currentIndex}">
+			    {{item}}
+			</span>
 		</div>
 	</div>
 </template>
@@ -14,15 +19,18 @@
 		width: 100%;
 		line-height: 40px;
 		background-color: #fff;
-		margin: -1px 0;
+		margin: -1px 0 3px;
 	}
 	.tab-control-item{
 		flex: 1;
-		margin: 0 42px;
+		/*margin: 0 42px;*/
 	}
 	.select{
 		color: #ff8198;
         border-bottom: 3px solid #ff8198;
+	}
+	.item-text{
+		padding-bottom: 5px;
 	}
 </style>
 

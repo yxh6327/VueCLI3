@@ -23,17 +23,18 @@
 
 <style scoped>
 	.param-info{
+		font-size: 14px;
 		width: 100%;
 		border-bottom: 5px solid #f2f5f8;
 	}
 	.param-top{
 		width: 100%;
-		padding-top: 30px;
+		padding-top: 10px;
 		padding-bottom: 10px;
 	}
 	table{
-		width: 100%;
-		margin: 0 10px;
+		width: 90%;
+		margin: 0 15px;
 		border-collapse: collapse;
 	}
 	.table1{
@@ -46,6 +47,7 @@
 	}
 	.param-bottom{
         width: 100%;
+        margin-bottom: 20px;
 	}
 	.param-bottom-td1{
 		height: 40px;

@@ -1,30 +1,30 @@
 <template>
 	<div id="home">
-		<NavBar class="home-nav">
+		<nav-bar class="home-nav">
 			<div slot="center">购物车</div>
-		</NavBar>
-		<TabControl :titles="['流行','新款','精选']"
+		</nav-bar>
+		<tab-control :titles="['流行','新款','精选']"
              class="tab-control"
              @tabClick="tabClick"
              ref="tabControl1"
              :class="{fixed:isTabControlfixed}"
-             v-show="isTabControlfixed"></TabControl>
-		<Scroll class="content" 
+             v-show="isTabControlfixed"></tab-control>
+		<scroll class="content" 
 		        ref="scroll" 
 		        :probeType="3"
 		        @scrollPosition="scrollPosition"
 		        :pullUpLoad="true"
 		        @loadMore="loadMore">
-			<HomeSwiper :banner="banner" @swiperImageLoad="getOffesetTop"></HomeSwiper>
-			<RecommendView :recommend="recommend"></RecommendView>
-			<FeatureView></FeatureView>
-			<TabControl :titles="['流行','新款','精选']"
+			<home-swiper :banner="banner" @swiperImageLoad="getOffesetTop"></home-swiper>
+			<recommend-view :recommend="recommend"></recommend-view>
+			<feature-view></feature-view>
+			<tab-control :titles="['流行','新款','精选']"
 			             class="tab-control"
 			             @tabClick="tabClick"
-			             ref="tabControl2"></TabControl>
-			<GoodsList :goods="showGoods"></GoodsList>
-		</Scroll>
-		<BackTop @click.native="backClick" v-show="isBackTopShow"></BackTop>
+			             ref="tabControl2"></tab-control>
+			<goods-list :goods="showGoods"></goods-list>
+		</scroll>
+		<back-top @click.native="backClick" v-show="isBackTopShow"></back-top>
 	</div>
 </template>
 
