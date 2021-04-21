@@ -5,12 +5,12 @@
 			<p>我的余额</p>
 		</div>
 		<div class="item item2">
-			<p><span>0</span>个</p>
-			<p>我的优惠</p>
-		</div>
-		<div class="item">
 			<p><span>0</span>分</p>
 			<p>我的积分</p>
+		</div>
+		<div class="item" @click="favoritesClick">
+			<p><span>{{favoritesListLength}}</span>个</p>
+			<p>收藏夹</p>
 		</div>
 	</div>
 </template>
@@ -41,7 +41,16 @@
 </style>
 
 <script>
+import {mapGetters} from 'vuex'
 	export default{
-		name: 'ProfileWallet'
+		name: 'ProfileWallet',
+		computed: {
+			...mapGetters(['favoritesListLength'])
+		},
+		methods: {
+			favoritesClick() {
+				this.$router.push('/favorites');
+			}
+		}
 	}
 </script>

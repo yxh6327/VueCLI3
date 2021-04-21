@@ -5,6 +5,7 @@ const Category = () => import('views/category/Category.vue')
 const Shopcar = () => import('views/shopcar/Shopcar.vue')
 const Profile = () => import('views/profile/Profile.vue')
 const Detail = () => import('views/detail/Detail.vue')
+const Favorites = () => import('views/favorites/Favorites.vue')
 
 Vue.use(VueRouter)
 
@@ -32,6 +33,10 @@ const routes = [
     {
         path: '/detail/:iid',
         component: Detail
+    },
+    {
+        path: '/favorites',
+        component: Favorites
     }
 ]
 

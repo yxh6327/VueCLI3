@@ -9,8 +9,8 @@
 				<span class="option shop"></span>
 				<span>店铺</span>
 			</div>
-			<div class="left-item">
-				<span class="option collect"></span>
+			<div class="left-item" @click="addFavorites">
+				<span class="option" :class="{collect:!hasCollected , hascollected:hasCollected}"></span>
 				<span>收藏</span>
 			</div>
 		</div>
@@ -58,11 +58,15 @@
 		background-size: 22px;
 	}
 	.shop{
-		background: url("~assets/img/detail/detail_bottom.png") no-repeat 0px -99px;
+		background: url("~assets/img/detail/detail_bottom.png") no-repeat 0px -98px;
 		background-size: 22px;
 	}
 	.collect{
 		background: url("~assets/img/detail/detail_bottom.png") no-repeat 0px 0px;
+		background-size: 22px;
+	}
+	.hascollected{
+		background: url("~assets/img/detail/detail_bottom.png") no-repeat 0px -26px;
 		background-size: 22px;
 	}
 	.right-item{
@@ -80,9 +84,18 @@
 <script>
 	export default{
 		name: 'DetailBottomBar',
+		data() {
+			return{
+				hasCollected: false
+			}
+		},
 		methods: {
 			addShopCar() {
 				this.$emit('addShopCar');
+			},
+			addFavorites() {
+				this.hasCollected = true;
+				this.$emit('addFavorites');
 			}
 		}
 	}

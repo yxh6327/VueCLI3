@@ -11,7 +11,7 @@
       <goods-list :goods="recommends" ref="recommend"/>
     </scroll>
     <BackTop @click.native="backClick" v-show="isBackTopShow"></BackTop>
-    <detail-bottom-bar @addShopCar="addShopCar"/>
+    <detail-bottom-bar @addShopCar="addShopCar" @addFavorites="addFavorites"/>
     <toast :message="message" :is-show="isShow"/>
   </div>
 </template>
@@ -171,16 +171,9 @@
         this.$refs.scroll.scrollTo(0,0,500);
       },
       addShopCar() {
-        const product = {};
-        product.iid = this.iid;
-        product.title = this.goods.title;
-        product.price = this.goods.realPrice;
-        product.img = this.topImages[0];
-        product.desc = this.goods.desc;
-        product.count = 0;
-        product.checked = false;
+        const product_ = this.getGoodsInfo();
         //当加入购物车这个环节完成后就返回一个信息
-        this.$store.dispatch('shopCar', product).then((res) => {
+        this.$store.dispatch('shopCar', product_).then((res) => {
           //普通的方法使用toast
           this.message = res;
           this.isShow = true;
@@ -192,6 +185,30 @@
           // 插件的方法使用toast
           // this.$toast.methods.show(res, 1500);
         });
+      },
+      addFavorites() {
+        const product_ = this.getGoodsInfo();
+        this.$store.dispatch('favorites',product_).then((res) => {
+          this.message = res;
+          this.isShow = true;
+
+          setTimeout(() => {
+            this.message = '';
+            this.isShow = false;
+          }, 1500);
+        })
+      },
+      getGoodsInfo() {
+        const product = {};
+        product.iid = this.iid;
+        product.title = this.goods.title;
+        product.price = this.goods.realPrice;
+        product.img = this.topImages[0];
+        product.desc = this.goods.desc;
+        product.count = 0;
+        product.checked = false;
+        product.collected = this.goods.columns[1];
+        return product;
       }
     }
   }
