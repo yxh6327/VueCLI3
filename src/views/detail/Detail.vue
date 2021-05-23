@@ -11,7 +11,7 @@
       <goods-list :goods="recommends" ref="recommend"/>
     </scroll>
     <BackTop @click.native="backClick" v-show="isBackTopShow"></BackTop>
-    <detail-bottom-bar @addShopCar="addShopCar" @addFavorites="addFavorites"/>
+    <detail-bottom-bar @addShopCar="addShopCar" @addFavorites="addFavorites" :iid="iid"/>
     <toast :message="message" :is-show="isShow"/>
   </div>
 </template>
@@ -188,9 +188,12 @@
       },
       addFavorites() {
         const product_ = this.getGoodsInfo();
+        // product_.hasCollected = true; //这一步放在store的index.js中实现
         this.$store.dispatch('favorites',product_).then((res) => {
-          this.message = res;
+          this.message = res[0];
           this.isShow = true;
+
+          this.hasCollected = res[1];
 
           setTimeout(() => {
             this.message = '';
@@ -208,6 +211,7 @@
         product.count = 0;
         product.checked = false;
         product.collected = this.goods.columns[1];
+        product.hasCollected = false;
         return product;
       }
     }

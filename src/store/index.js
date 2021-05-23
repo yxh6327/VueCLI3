@@ -26,12 +26,21 @@ export default new Vuex.Store({
   	addCount(state, payload) {
   	  payload.count++; 		 		
   	},
+    subCount(state, payload) {
+      payload.count--;
+    },
   	addGood(state, payload) {
   		// payload.checked = false;
   		state.carList.push(payload);
   	},
+    deleteGood(state, payload) {
+      state.carList.splice(payload, 1);
+    },
     addFavorites(state, payload) {
       state.favoritesList.push(payload);
+    },
+    deleteFavorites(state, payload) {
+      state.favoritesList.splice(payload, 1);
     }
   },
   actions: {
@@ -59,11 +68,38 @@ export default new Vuex.Store({
         if(oldFavorites){
 
         } else{
+          //表示该商品已经被收藏
+          payload.hasCollected = true;
           context.commit('addFavorites', payload);
-          resolve('已经加入收藏夹')
+          resolve(['已经加入收藏夹',payload.hasCollected])
         }
       })
-    }
+    },
+    judgeCount(context, payload) {
+      return new Promise((resolve, reject) => {
+        if(payload.count === 1) {
+          resolve('该商品不能减少了');
+        } else{
+          context.commit('subCount', payload);
+        }
+      })
+    },
+    findGood(context, payload) {
+      for(var i = 0; i < context.state.carList.length; i++) {
+        if(context.state.carList[i].iid === payload.iid) {
+          context.commit('deleteGood', i);
+          break;
+        }
+      }
+    },
+    findFavoritesGood(context, payload) {
+      for(var i = 0; i < context.state.favoritesList.length; i++) {
+        if(context.state.favoritesList[i].iid === payload.iid) {
+          context.commit('deleteFavorites', i);
+          break;
+        }
+      }
+    },
   },
   modules: {
   }

@@ -71,7 +71,9 @@
                 this.$bus.$emit('itemImageLoad');                
             },
             itemClick() {
-                this.$router.push('/detail/' + this.goodsitem.iid);
+                if(this.goodsitem.iid) {
+                    this.$router.push('/detail/' + this.goodsitem.iid);
+                }  
             }
         }
 	}

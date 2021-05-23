@@ -82,11 +82,28 @@
 </style>
 
 <script>
+import {mapGetters} from 'vuex'
+
 	export default{
 		name: 'DetailBottomBar',
 		data() {
 			return{
-				hasCollected: false
+				// hasCollected: false
+			}
+		},
+		props: {
+			iid: {
+				type: String
+			}
+		},
+		computed: {
+			...mapGetters(['favoritesList']),
+			hasCollected() {
+				for(var i = 0; i < this.favoritesList.length; i++) {
+					if(this.favoritesList[i].iid === this.iid) {
+						return this.favoritesList[i].hasCollected;
+					}
+				}
 			}
 		},
 		methods: {
@@ -94,7 +111,7 @@
 				this.$emit('addShopCar');
 			},
 			addFavorites() {
-				this.hasCollected = true;
+				// this.hasCollected = true;
 				this.$emit('addFavorites');
 			}
 		}
