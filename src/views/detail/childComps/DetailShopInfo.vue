@@ -35,26 +35,6 @@
   </div>
 </template>
 
-<script>
-	export default {
-		name: "DetailShopInfo",
-    props: {
-		  shop: {
-		    type: Object,
-        default() {
-		      return {}
-        }
-      }
-    },
-    filters: {
-      sellCountFilter: function (value) {
-        if (value < 10000) return value;
-        return (value/10000).toFixed(1) + '万'
-      }
-    }
-	}
-</script>
-
 <style scoped>
   .shop-info {
     padding: 25px 8px;
@@ -155,3 +135,25 @@
     border-radius: 10px;
   }
 </style>
+
+
+<script>
+	export default {
+		name: "DetailShopInfo",
+    props: {
+		  shop: {
+		    type: Object,
+        default() {
+		      return {}
+        }
+      }
+    },
+    filters: {
+      sellCountFilter: function (value) {
+        if (value < 10000) return value;
+        return (value/10000).toFixed(1) + '万'
+      }
+    }
+	}
+</script>
+
