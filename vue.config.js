@@ -17,5 +17,9 @@ module.exports={
         .set('common',resolve('./src/common'))
         //注意 store 和 router 没必要配置
 　　　　
-    }
+    },
+
+    publicPath: process.env.NODE_ENV === 'production'
+    ? '/VueCLI3/'
+    : '/'
 }
